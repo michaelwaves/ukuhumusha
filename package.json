@@ -10,13 +10,16 @@
   },
   "dependencies": {
     "@google-cloud/translate": "^8.0.2",
+    "encoding": "^0.1.13",
     "firebase": "^10.4.0",
     "framer-motion": "^10.16.4",
     "next": "13.5.4",
+    "next-auth": "^4.23.2",
     "openai": "^4.11.1",
     "react": "^18",
     "react-dom": "^18",
-    "react-icons": "^4.11.0"
+    "react-icons": "^4.11.0",
+    "request": "^2.88.2"
   },
   "devDependencies": {
     "@types/node": "^20",

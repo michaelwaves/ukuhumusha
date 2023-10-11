@@ -1,12 +1,9 @@
 "use client"
 import { use, useEffect, useState } from "react"
 import { AiOutlineSend } from "react-icons/ai"
-import { BsTranslate } from "react-icons/bs"
 import { db, useAuth } from "@/utils/Firebase"
 import { setDoc, updateDoc, collection, doc, addDoc } from "firebase/firestore"
-import { LANGUAGE_CODES } from "@/utils/LanguageCodes"
-import { motion, AnimatePresence } from "framer-motion"
-import { slideFromBottom, slideFromTop } from "@/utils/FramerVariants"
+
 
 const INITIAL_MESSAGES = [
     {
@@ -16,41 +13,15 @@ const INITIAL_MESSAGES = [
 ]
 
 
-export default function Chat() {
+export default function ChatGuest() {
     const [messages, setMessages] = useState<any>(INITIAL_MESSAGES)//messages in EN
     const [translatedMessages, setTranslatedMessages] = useState<any>([])//messages in obscure foreign language
     const [input, setInput] = useState("")
     const [target, setTarget] = useState("zu")
-    const [translateOpen, setTranslateOpen] = useState(true)
-
-    const languageOptions = LANGUAGE_CODES.map((language: any, index: any) => {
-        return <option className="text-gray-700" key={index} value={language.code}>{language.language}</option>
-    })
-
-    const handleLanguageChange = (e: any) => {
-        setTarget(e.target.value)
-    }
-
-    const languageSelect = <select className="w-24 h-12 rounded-xl shadow-d" value={target} onChange={(e) => handleLanguageChange(e)}>{languageOptions}</select>
+    const [dateString, setDate] = useState<string>("")
 
     const { user, signedIn } = useAuth();
-    const [currentDate, setCurrentDate] = useState<string>("")
 
-    useEffect(() => {
-        if (!signedIn) return
-        const subCollectionRef = collection(doc(db, "users", user.uid), "chats");
-        const handleAddChat = async () => {
-            const date = new Date();
-            const dateString = date.toISOString();//unique id every time
-            await setDoc(doc(subCollectionRef, dateString), {
-                name: "New Chat",
-                createdAt: date,
-                messages: []
-            })
-            setCurrentDate(dateString)
-        }
-        handleAddChat()
-    }, [signedIn])
 
     /* //create new chat for firebase logging
     const collectionRef = collection(db, "chats");
@@ -60,7 +31,7 @@ export default function Chat() {
         setDoc(doc(collectionRef, dateString), { messages: [] })
         setDate(dateString);
     }, []);
- 
+
     //log new message every time messages changes
     useEffect(() => {
         try {
@@ -71,7 +42,7 @@ export default function Chat() {
         } catch (error) {
             console.log(error)
         }
- 
+
     }, [messages]); */
 
     const messageComponents = messages.map((message: any, index: any) => {
@@ -142,6 +113,10 @@ export default function Chat() {
         setInput("")
     }
 
+    useEffect(() => {
+
+    })
+
     //debugging
     useEffect(() => {
         //console.log(messages)
@@ -151,25 +126,10 @@ export default function Chat() {
 
     return (
         <div className="w-full h-full">
-            <div className="">
+            <div className="pb-28">
                 {messageComponents}
             </div>
-            <div className="flex flex-row items-center justify-center pb-28">
-                <BsTranslate className="text-2xl text-gray-500 " onClick={() => setTranslateOpen(!translateOpen)} />
-
-                <motion.div variants={slideFromBottom}
-                    initial={"hidden"}
-                    animate={"active"}
-                    exit={"hidden"}
-                    onClick={() => setTranslateOpen(!translateOpen)}
-                    className="flex flex-row gap-4 items-center justify-center">
-                    <p className="text-xs text-gray-500">Translate through:</p>
-                    {languageSelect}
-                </motion.div>
-
-            </div>
             <div className="fixed bottom-0 left-0 flex flex-col w-full p-2 gap-4 bg-gray-100 border-t-[1px] border-gray-300">
-
                 <form onSubmit={(e) => handleSubmitInput(e)} className="flex flex-row w-full gap-4">
                     <input type="text" placeholder="Send a Message" className="px-4 w-full h-12 rounded-xl shadow-d" value={input} onChange={(e) => setInput(e.target.value)} />
                     <button type="submit" ><AiOutlineSend className="w-8 h-8 text-gray-400" /></button>

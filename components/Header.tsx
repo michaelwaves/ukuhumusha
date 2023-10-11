@@ -9,7 +9,7 @@ export default function Header() {
             <h2>New Chat</h2>
             <div className="flex flex-row gap-2">
                 <AiOutlinePlus className="w-8 h-8" />
-                <Login />
+                {/* <Login /> */}
             </div>
         </div >
     )

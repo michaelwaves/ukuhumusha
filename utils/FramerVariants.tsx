@@ -3,7 +3,6 @@ export const slideFromBottom = {
         y: 0,
         opacity: 1,
         transition: {
-            duration: 0.3,
             ease: "easeInOut"
         }
     },
@@ -21,5 +20,29 @@ export const slideFromTop = {
     hidden: {
         y: -100,
         opacity: 0
+    }
+}
+
+export const scaleFromLeft = {
+    active: {
+        scale: 1,
+        opacity: 1,
+        position: "relative",
+    },
+    hidden: {
+        scale: 0,
+        opacity: 0,
+        position: "absolute",
+    }
+}
+
+export const shrinkVanish = {
+    active: {
+        scale: 1,
+        opacity: 1,
+    },
+    hidden: {
+        scale: 0,
+        opacity: 0,
     }
 }

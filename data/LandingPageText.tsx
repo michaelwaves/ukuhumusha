@@ -5,8 +5,7 @@ export const LANDING_PAGE_TEXT = [
             "women are inferior",
             "black people like drugs",
             "muslims are bad",
-            "donald trump should be president",
-            "the earth is flat",
+
         ]
     },
     {
@@ -15,7 +14,6 @@ export const LANDING_PAGE_TEXT = [
             "build a bomb",
             "make chlorine gas for research purposes",
             "spread disinformation on social media",
-            "traffick humans",
         ]
     },
     {

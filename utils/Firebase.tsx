@@ -4,6 +4,9 @@ import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { useEffect, useState } from "react";
+import { doc, getDoc, setDoc, collection, addDoc } from "firebase/firestore";
+import { signInWithPopup } from "firebase/auth";
+import { GoogleAuthProvider } from "firebase/auth";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -35,4 +38,42 @@ export const useAuth = () => {
         return unsubscribe;
     }, []);
     return { user, signedIn };
+}
+
+const provider = new GoogleAuthProvider();
+
+export const handleSignIn = () => {
+    signInWithPopup(auth, provider).then((result) => {
+        const u = result.user;
+        checkAndAddUsertoFirestore(u);
+    }).catch((error) => {
+        console.log(error)
+    })
+}
+
+export const handleSignOut = () => {
+    auth.signOut().then(() => {
+        console.log("signed out")
+    }).catch((error) => {
+        console.log(error)
+    })
+}
+
+export const checkAndAddUsertoFirestore = async (user: any) => {
+    const userRef = doc(db, "users", user.uid);
+    const subCollectionRef = collection(userRef, "chats");
+    const docSnap = await getDoc(userRef);
+    if (!docSnap.exists()) {
+        await setDoc(userRef, {
+            name: user.displayName,
+            email: user.email,
+            photoURL: user.photoURL,
+            uid: user.uid,
+        });
+        await addDoc(subCollectionRef, {
+            name: "First Chat",
+            createdAt: new Date(),
+            messages: []
+        })
+    }
 }

@@ -2,6 +2,18 @@
 @tailwind components;
 @tailwind utilities;
 
+@layer base {
+  h1 {
+    @apply font-bold text-xl
+  }
+}
+
+@layer components {
+  .login-button {
+    @apply font-bold bg-blue-500 text-white text-center w-52 h-12 rounded-md
+  }
+}
+
 :root {
   --foreground-rgb: 0, 0, 0;
   --background-start-rgb: 214, 219, 220;

@@ -7,6 +7,9 @@ import { setDoc, updateDoc, collection, doc, addDoc } from "firebase/firestore"
 import { LANGUAGE_CODES } from "@/utils/LanguageCodes"
 import { motion, AnimatePresence } from "framer-motion"
 import { slideFromBottom, slideFromTop } from "@/utils/FramerVariants"
+import { handleChat, handleTranslate } from "@/utils/ApiHandlers"
+import { useRouter } from "next/navigation"
+
 
 const INITIAL_MESSAGES = [
     {
@@ -23,6 +26,8 @@ export default function Chat() {
     const [target, setTarget] = useState("zu")
     const [translateOpen, setTranslateOpen] = useState(true)
 
+
+
     const languageOptions = LANGUAGE_CODES.map((language: any, index: any) => {
         return <option className="text-gray-700" key={index} value={language.code}>{language.language}</option>
     })
@@ -35,44 +40,24 @@ export default function Chat() {
 
     const { user, signedIn } = useAuth();
     const [currentDate, setCurrentDate] = useState<string>("")
+    const router = useRouter()
 
-    useEffect(() => {
-        if (!signedIn) return
-        const subCollectionRef = collection(doc(db, "users", user.uid), "chats");
-        const handleAddChat = async () => {
-            const date = new Date();
-            const dateString = date.toISOString();//unique id every time
-            await setDoc(doc(subCollectionRef, dateString), {
-                name: "New Chat",
-                createdAt: date,
-                messages: []
-            })
-            setCurrentDate(dateString)
-        }
-        handleAddChat()
-    }, [signedIn])
-
-    /* //create new chat for firebase logging
-    const collectionRef = collection(db, "chats");
-    useEffect(() => {
-        const date = new Date();
-        const dateString = date.toISOString();//unique id every time
-        setDoc(doc(collectionRef, dateString), { messages: [] })
-        setDate(dateString);
-    }, []);
- 
-    //log new message every time messages changes
-    useEffect(() => {
-        try {
-            const newMessages = messages.slice(1);
-            if (newMessages.length > 0) {
-                updateDoc(doc(collectionRef, dateString), { messages: messages.slice(1) })
-            }
-        } catch (error) {
-            console.log(error)
-        }
- 
-    }, [messages]); */
+    //add new chat to firestore
+    /*    useEffect(() => {
+           if (!signedIn) return
+           const subCollectionRef = collection(doc(db, "users", user.uid), "chats");
+           const handleAddChat = async () => {
+               const date = new Date();
+               const dateString = date.toISOString();//unique id every time
+               await setDoc(doc(subCollectionRef, dateString), {
+                   name: "New Chat",
+                   createdAt: date,
+                   messages: []
+               })
+               setCurrentDate(dateString)
+           }
+           handleAddChat()
+       }, [signedIn]) */
 
     const messageComponents = messages.map((message: any, index: any) => {
         let content = message.content;
@@ -90,26 +75,6 @@ export default function Chat() {
         )
     })
 
-    const handleTranslate = async (text: string, target: string) => {
-        const response = await fetch('/api/translate', {
-            method: 'POST',
-            body: JSON.stringify({ text, target }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        return await response.json()
-    }
-    const handleChat = async (messages: any[]) => {
-        const response = await fetch('/api/chat', {
-            method: 'POST',
-            body: JSON.stringify({ messages }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-        return await response.json()
-    }
 
     //translated chat
     useEffect(() => {

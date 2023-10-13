@@ -1,12 +1,12 @@
 "use client"
-import { use, useEffect, useState } from "react"
+import { useEffect, useState } from "react"
 import { AiOutlineSend } from "react-icons/ai"
 import { BsTranslate } from "react-icons/bs"
-import { db, useAuth } from "@/utils/Firebase"
-import { setDoc, updateDoc, collection, doc, addDoc } from "firebase/firestore"
+import { motion } from "framer-motion"
+
+//custom imports
 import { LANGUAGE_CODES } from "@/utils/LanguageCodes"
-import { motion, AnimatePresence } from "framer-motion"
-import { slideFromBottom, slideFromTop } from "@/utils/FramerVariants"
+import { slideFromBottom } from "@/utils/FramerVariants"
 import { handleChat, handleTranslate } from "@/utils/ApiHandlers"
 
 
@@ -18,13 +18,11 @@ const INITIAL_MESSAGES = [
 ]
 
 
-export default function ChatGuest() {
+export default function ChatGuestSimple() {
     const [messages, setMessages] = useState<any>(INITIAL_MESSAGES)//messages in EN
     const [translatedMessages, setTranslatedMessages] = useState<any>([])//messages in obscure foreign language
     const [input, setInput] = useState("")
     const [target, setTarget] = useState("zu")
-    const [translateOpen, setTranslateOpen] = useState(true)
-    const [date, setDate] = useState<string>("")
 
     const languageOptions = LANGUAGE_CODES.map((language: any, index: any) => {
         return <option className="text-gray-700" key={index} value={language.code}>{language.language}</option>
@@ -35,30 +33,6 @@ export default function ChatGuest() {
     }
 
     const languageSelect = <select className="w-24 h-12 rounded-xl shadow-d" value={target} onChange={(e) => handleLanguageChange(e)}>{languageOptions}</select>
-
-    const { user, signedIn } = useAuth();
-
-    //create new chat for firebase logging
-    const collectionRef = collection(db, "chats");
-    useEffect(() => {
-        const date = new Date();
-        const dateString = date.toISOString();//unique id every time
-        setDoc(doc(collectionRef, dateString), { messages: [] })
-        setDate(dateString);
-    }, []);
-
-    //log new message every time messages changes
-    useEffect(() => {
-        try {
-            const newMessages = messages.slice(1);
-            if (newMessages.length > 0) {
-                updateDoc(doc(collectionRef, date), { messages: messages.slice(1) })
-            }
-        } catch (error) {
-            console.log(error)
-        }
-
-    }, [messages]);
 
     const messageComponents = messages.map((message: any, index: any) => {
         let content = message.content;
@@ -121,13 +95,12 @@ export default function ChatGuest() {
                 {messageComponents}
             </div>
             <div className="flex flex-row items-center justify-center pb-28">
-                <BsTranslate className="text-2xl text-gray-500 " onClick={() => setTranslateOpen(!translateOpen)} />
+                <BsTranslate className="text-2xl text-gray-500 " />
 
                 <motion.div variants={slideFromBottom}
                     initial={"hidden"}
                     animate={"active"}
                     exit={"hidden"}
-                    onClick={() => setTranslateOpen(!translateOpen)}
                     className="flex flex-row gap-4 items-center justify-center">
                     <p className="text-xs text-gray-500">Translate through:</p>
                     {languageSelect}

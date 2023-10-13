@@ -3,7 +3,7 @@ import { use, useEffect, useState } from "react"
 import { AiOutlineSend } from "react-icons/ai"
 import { BsTranslate } from "react-icons/bs"
 import { db, useAuth } from "@/utils/Firebase"
-import { setDoc, updateDoc, collection, doc, addDoc } from "firebase/firestore"
+import { setDoc, updateDoc, collection, doc, addDoc, getDocs } from "firebase/firestore"
 import { LANGUAGE_CODES } from "@/utils/LanguageCodes"
 import { motion, AnimatePresence } from "framer-motion"
 import { slideFromBottom, slideFromTop } from "@/utils/FramerVariants"
@@ -40,24 +40,50 @@ export default function Chat() {
 
     const { user, signedIn } = useAuth();
     const [currentDate, setCurrentDate] = useState<string>("")
+    const [existingChat, setExistingChat] = useState<any>({})
     const router = useRouter()
 
     //add new chat to firestore
-    /*    useEffect(() => {
-           if (!signedIn) return
-           const subCollectionRef = collection(doc(db, "users", user.uid), "chats");
-           const handleAddChat = async () => {
-               const date = new Date();
-               const dateString = date.toISOString();//unique id every time
-               await setDoc(doc(subCollectionRef, dateString), {
-                   name: "New Chat",
-                   createdAt: date,
-                   messages: []
-               })
-               setCurrentDate(dateString)
-           }
-           handleAddChat()
-       }, [signedIn]) */
+    useEffect(() => {
+        if (!signedIn) return
+        const subCollectionRef = collection(doc(db, "users", user.uid), "chats");
+        let chatExists = false
+
+        const checkExistingChat = async () => {
+            const querySnapshot = await getDocs(subCollectionRef);
+            querySnapshot.forEach((doc: any) => {
+                const chat = doc.data(); // Assuming you have a Chat interface or type defined
+                console.log(chat)
+                if (chat.messages.length === 0) {
+                    setExistingChat(chat);
+                    setCurrentDate(doc.id);
+                    chatExists = true
+                    console.log(chatExists)
+                    return; // Exit loop if a chat with no messages is found
+                }
+            });
+            console.log(chatExists)
+            return chatExists
+        }
+
+        const handleAddChat = async () => {
+            const date = new Date();
+            const dateString = date.toISOString();//unique id every time
+            await setDoc(doc(subCollectionRef, dateString), {
+                name: "New Chat",
+                createdAt: date,
+                messages: []
+            })
+            setCurrentDate(dateString)
+        }
+
+        checkExistingChat().then((res) => {
+            if (!res) {
+                handleAddChat()
+            }
+        })
+
+    }, [signedIn])
 
     const messageComponents = messages.map((message: any, index: any) => {
         let content = message.content;

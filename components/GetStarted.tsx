@@ -34,7 +34,7 @@ export default function GetStarted() {
                     <div className="flex flex-row gap-2 text-sm text-gray-400">
                         <Link href="/legal">Terms of use</Link>
                         |
-                        <Link href="/privacy">Privacy Policy</Link>
+                        <Link href="/legal/privacy">Privacy Policy</Link>
                     </div>
 
                 </div>

@@ -1,8 +1,8 @@
-import LandingHero from "@/components/LandingHero";
+import ChatsSidebar from "@/components/ChatsSidebar"
 
 
 export default function Page() {
     return (
-        <LandingHero />
+        <ChatsSidebar />
     )
 }

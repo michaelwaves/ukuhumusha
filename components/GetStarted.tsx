@@ -26,7 +26,7 @@ export default function GetStarted() {
                     <BsCircleFill />
                 </span>
                 <h1>Get Started</h1>
-                <div className="flex flex-row gap-4">
+                <div className="flex flex-col sm:flex-row gap-4">
                     <button onClick={handleSignIn} className="login-button">Login</button>
                     <button onClick={handleSignIn} className="login-button">Sign Up</button>
                 </div>

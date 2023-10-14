@@ -7,6 +7,7 @@ import { useEffect, useState } from "react";
 import { doc, getDoc, setDoc, collection, addDoc } from "firebase/firestore";
 import { signInWithPopup } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
+import { handleCompletion } from "./ApiHandlers";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -76,4 +77,13 @@ export const checkAndAddUsertoFirestore = async (user: any) => {
             messages: []
         })
     }
+}
+
+export const autoNameChat = (chatRef: any, messageContents: string) => {
+    const PROMPT = `write a short description summarizing the following chat, no more than 5 words: ${messageContents}`
+    handleCompletion(PROMPT).then((res) => {
+        const name = res.strip("'").strip('"').strip(".").strip(",").strip("!").strip("?").strip(":").strip(";").strip(" ")
+        //console.log(name)
+        setDoc(chatRef, { name: name }, { merge: true })
+    })
 }

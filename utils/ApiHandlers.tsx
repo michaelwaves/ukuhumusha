@@ -18,3 +18,14 @@ export const handleChat = async (messages: any[]) => {
     })
     return await response.json()
 }
+
+export const handleCompletion = async (prompt: string) => {
+    const response = await fetch("/api/completions", {
+        method: 'POST',
+        body: JSON.stringify({ prompt }),
+        headers: {
+            'Content-Type': 'application/json'
+        }
+    })
+    return await response.json()
+}

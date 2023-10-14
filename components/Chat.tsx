@@ -2,7 +2,7 @@
 import { use, useEffect, useState } from "react"
 import { AiOutlineSend } from "react-icons/ai"
 import { BsTranslate } from "react-icons/bs"
-import { db, useAuth } from "@/utils/Firebase"
+import { db, useAuth, autoNameChat } from "@/utils/Firebase"
 import { setDoc, updateDoc, collection, doc, addDoc, getDocs } from "firebase/firestore"
 import { LANGUAGE_CODES } from "@/utils/LanguageCodes"
 import { motion, AnimatePresence } from "framer-motion"
@@ -39,11 +39,11 @@ export default function Chat() {
     const languageSelect = <select className="w-24 h-12 rounded-xl shadow-d" value={target} onChange={(e) => handleLanguageChange(e)}>{languageOptions}</select>
 
     const { user, signedIn } = useAuth();
-    const [currentDate, setCurrentDate] = useState<string>("")
+    const [currentDate, setCurrentDate] = useState<string>("")//using current date to ISO string as unique id for chat
     const [existingChat, setExistingChat] = useState<any>({})
     const router = useRouter()
 
-    //add new chat to firestore
+    //add new chat to firestore if there isn't already a chat with name "New Chat" and no messages
     useEffect(() => {
         if (!signedIn) return
         const subCollectionRef = collection(doc(db, "users", user.uid), "chats");
@@ -52,7 +52,7 @@ export default function Chat() {
         const checkExistingChat = async () => {
             const querySnapshot = await getDocs(subCollectionRef);
             querySnapshot.forEach((doc: any) => {
-                const chat = doc.data(); // Assuming you have a Chat interface or type defined
+                const chat = doc.data();
                 console.log(chat)
                 if (chat.messages.length === 0) {
                     setExistingChat(chat);
@@ -84,6 +84,31 @@ export default function Chat() {
         })
 
     }, [signedIn])
+
+    //update messages in firestore
+    useEffect(() => {
+        const handleUpdateChat = async () => {
+            const subCollectionRef = collection(doc(db, "users", user.uid), "chats");
+            const chatRef = doc(subCollectionRef, currentDate);
+            await updateDoc(chatRef, {
+                messages: messages
+            });
+        }
+        if (currentDate !== "") {
+            handleUpdateChat()
+        }
+
+        const handleNameChat = async () => {
+            const subCollectionRef = collection(doc(db, "users", user.uid), "chats");
+            const chatRef = doc(subCollectionRef, currentDate);
+            const messageContents = messages.map((message: any) => `${message.role}: ${message.content}\n`).toString()
+            autoNameChat(chatRef, messageContents)
+        }
+
+        if (messages.length == 3) {
+            handleNameChat()
+        }
+    }, [messages])
 
     const messageComponents = messages.map((message: any, index: any) => {
         let content = message.content;

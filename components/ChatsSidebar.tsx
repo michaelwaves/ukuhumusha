@@ -39,18 +39,20 @@ export default function ChatsSidebar() {
         return (
             <Link href={`/chat/${chat.id}`} className="flex flex-row items-center justify-start gap-2 h-12 w-full px-2 hover:bg-gray-700 rounded-xl ">
                 <BsChatLeft className="text-white w-4 h-4" />
-                <p className="text-white">{chat.name}</p>
+                <p className="text-white w-full whitespace-nowrap">
+                    {chat.name}
+                </p>
             </Link>
         )
     })
 
     return (
-        <div className="w-60 h-screen bg-gray-800 p-2">
+        <div className="w-60 h-screen bg-gray-800 ">
             <Link href={"/chat"} className="text-white items-center flex flex-row gap-2 p-2 border-[1px] rounded-md border-gray-400">
                 <AiOutlinePlus />
                 <p>New Chat</p>
             </Link>
-            <div className="relative flex flex-col items-center justify-center px-2 py-2">
+            <div className="relative flex flex-col items-center justify-start px-2 py-2">
                 <div className="w-12 h-full absolute top-0 right-0 bg-gradient-to-l from-gray-800"></div>
                 {chats.length > 0 ? chatSelectorComponents : <MoonLoader />}
             </div>

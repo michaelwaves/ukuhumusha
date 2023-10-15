@@ -16,9 +16,12 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en">
-      <body className={`${inter.className} flex flex-row`}>
-        <ChatsSidebar />
-        {children}</body>
+      <body className={`${inter.className}`}>
+        <div className='w-full flex flex-row'>
+          <ChatsSidebar />
+          {children}
+        </div>
+      </body>
     </html>
   )
 }

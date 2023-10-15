@@ -114,33 +114,33 @@ export default function ChatDynamic({ chatId }: { chatId: string }) {
     return (
         <div className="flex w-full h-screen flex-col items-center justify-between">
             <Header chatId={chatId} />
-            <div className="w-full h-full relative flex flex-col">
-                <div className="h-full overflow-y-scroll">
-                    {messageComponents}
 
-                    <div className="flex flex-row items-center justify-center pb-28">
-                        <BsTranslate className="text-2xl text-gray-500 " />
+            <div className="h-full overflow-y-scroll">
+                {messageComponents}
 
-                        <motion.div variants={slideFromBottom}
-                            initial={"hidden"}
-                            animate={"active"}
-                            exit={"hidden"}
-                            className="flex flex-row gap-4 items-center justify-center">
-                            <p className="text-xs text-gray-500">Translate through:</p>
-                            <LanguageSelector target={target} setTarget={setTarget} />
-                        </motion.div>
+                <div className="flex flex-row items-center justify-center pb-28">
+                    <BsTranslate className="text-2xl text-gray-500 " />
 
-                    </div>
-                </div>
-                <div className="absolute bottom-0 left-0 flex flex-col w-full p-2 gap-4 bg-gray-100 border-t-[1px] border-gray-300">
+                    <motion.div variants={slideFromBottom}
+                        initial={"hidden"}
+                        animate={"active"}
+                        exit={"hidden"}
+                        className="flex flex-row gap-4 items-center justify-center">
+                        <p className="text-xs text-gray-500">Translate through:</p>
+                        <LanguageSelector target={target} setTarget={setTarget} />
+                    </motion.div>
 
-                    <form onSubmit={(e) => handleSubmitInput(e)} className="flex flex-row w-full gap-4">
-                        <input type="text" placeholder="Send a Message" className="px-4 w-full h-12 rounded-xl shadow-d" value={input} onChange={(e) => setInput(e.target.value)} />
-                        <button type="submit" ><AiOutlineSend className="w-8 h-8 text-gray-400" /></button>
-                    </form>
-                    <p className="text-xs text-gray-500">Free research preview. Ukuhumusha will produce inaccurate information about people, places, or facts. <u>Ukuhumusha September 25 Version</u></p>
                 </div>
             </div>
+            <div className=" flex flex-col w-full p-2 gap-4 bg-gray-100 border-t-[1px] border-gray-300">
+
+                <form onSubmit={(e) => handleSubmitInput(e)} className="flex flex-row w-full gap-4">
+                    <input type="text" placeholder="Send a Message" className="px-4 w-full h-12 rounded-xl shadow-d" value={input} onChange={(e) => setInput(e.target.value)} />
+                    <button type="submit" ><AiOutlineSend className="w-8 h-8 text-gray-400" /></button>
+                </form>
+                <p className="text-xs text-gray-500">Free research preview. Ukuhumusha will produce inaccurate information about people, places, or facts. <u>Ukuhumusha September 25 Version</u></p>
+            </div>
+
         </div>
     )
 }

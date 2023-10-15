@@ -28,10 +28,10 @@ export default function Header({ chatId }: { chatId: string }) {
 
     return (
         <div className='flex-row flex bg-gray-700 text-white w-full h-16 items-center justify-between p-2'>
-            <AiOutlineMenu className="w-8 h-8" />
+            <AiOutlineMenu className="w-8 h-8 text-gray-700" />
             <h2>{title}</h2>
             <div className="flex flex-row gap-2">
-                <AiOutlinePlus className="w-8 h-8" />
+                {/* <AiOutlinePlus className="w-8 h-8" /> */}
                 <Login />
             </div>
         </div >

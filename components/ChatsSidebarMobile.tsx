@@ -8,7 +8,7 @@ import { MoonLoader } from "react-spinners"
 import { BsChatLeft } from "react-icons/bs"
 import { AiOutlinePlus, AiOutlineMenu, AiOutlineCloseSquare } from "react-icons/ai"
 import { AnimatePresence, motion } from "framer-motion";
-import { slideFromLeft } from "@/utils/FramerVariants";
+import { slideFromLeft, slideFromTop } from "@/utils/FramerVariants";
 export default function ChatsSidebarMobile() {
 
     const { user, signedIn } = useAuth();
@@ -54,26 +54,35 @@ export default function ChatsSidebarMobile() {
 
             <AnimatePresence>
                 {openChatMenu ?
-                    <motion.div className="relative w-60 h-screen bg-gray-800 pt-2"
-                        variants={slideFromLeft}
-                        initial="hidden"
-                        animate="active"
-                        exit="hidden"
-                    >
-                        <Link href={"/chat"} className="text-white items-center flex flex-row gap-2 p-2 border-[1px] rounded-md border-gray-400">
-                            <AiOutlinePlus />
-                            <p>New Chat</p>
-                        </Link>
-                        <div className="relative flex flex-col items-center justify-start px-2 py-2">
-                            <div className="w-12 h-full absolute top-0 right-0 bg-gradient-to-l from-gray-800"></div>
-                            {chats.length > 0 ? chatSelectorComponents : <MoonLoader />}
-                        </div>
-                        <div className="absolute top-2 right-0 translate-x-full bg-gray-800"
-                            onClick={() => setOpenChatMenu(false)}
+                    <div className="absolute top-0 left-0 z-10">
+                        <motion.div className="relative w-60 h-screen bg-gray-800 pt-2 "
+                            variants={slideFromLeft}
+                            initial="hidden"
+                            animate="active"
+                            exit="hidden"
                         >
-                            <AiOutlineCloseSquare className="z-20 text-white w-8 h-8" />
-                        </div>
-                    </motion.div>
+                            <Link href={"/chat"} className="text-white items-center flex flex-row gap-2 p-2 border-[1px] rounded-md border-gray-400">
+                                <AiOutlinePlus />
+                                <p>New Chat</p>
+                            </Link>
+                            <div className="relative flex flex-col items-center justify-start px-2 py-2">
+                                <div className="w-12 h-full absolute top-0 right-0 bg-gradient-to-l from-gray-800"></div>
+                                {chats.length > 0 ? chatSelectorComponents : <MoonLoader />}
+                            </div>
+                            <div className="absolute top-2 right-0 translate-x-full bg-gray-800"
+                                onClick={() => setOpenChatMenu(false)}
+                            >
+                                <AiOutlineCloseSquare className="z-20 text-white w-8 h-8" />
+                            </div>
+                        </motion.div>
+
+                        <motion.div className="w-screen h-screen bg-gray-700 absolute top-0 left-0 -z-10"
+                            onClick={() => setOpenChatMenu(false)}
+                            initial={{ opacity: 0 }}
+                            animate={{ opacity: 0.5, transition: { duration: 0.5 } }}
+                        />
+
+                    </div>
                     : <AiOutlineMenu className="z-20 text-white fixed top-2 left-2 w-8 h-8"
                         onClick={() => setOpenChatMenu(true)}
                     />}

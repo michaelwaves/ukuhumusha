@@ -1,10 +1,10 @@
-
-
+import ChatDynamic from "@/components/ChatDynamic"
 
 export default function Page({ params }: { params: { id: string } }) {
+    const chatId = decodeURIComponent(params.id)
     return (
-        <div>
-            <h1>Chat: {params.id}</h1>
-        </div>
+        <main className="w-full">
+            <ChatDynamic chatId={chatId} />
+        </main>
     )
 }

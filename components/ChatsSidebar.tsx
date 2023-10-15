@@ -37,7 +37,7 @@ export default function ChatsSidebar() {
 
     const chatSelectorComponents = chats.map((chat: any) => {
         return (
-            <Link href={`/chat/${chat.id}`} className="flex flex-row items-center justify-start gap-2 h-12 w-full px-2 hover:bg-gray-700 rounded-xl ">
+            <Link key={chat.id} href={`/chat/${chat.id}`} className="flex flex-row items-center justify-start gap-2 h-12 w-full px-2 hover:bg-gray-700 rounded-xl ">
                 <BsChatLeft className="text-white w-4 h-4" />
                 <p className="text-white w-full whitespace-nowrap">
                     {chat.name}

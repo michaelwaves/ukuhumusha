@@ -4,9 +4,10 @@ import { getAnalytics } from "firebase/analytics";
 import { getFirestore } from "firebase/firestore";
 import { getAuth } from "firebase/auth";
 import { useEffect, useState } from "react";
-import { doc, getDoc, setDoc, collection, addDoc } from "firebase/firestore";
+import { doc, getDoc, setDoc, collection, addDoc, getDocs, CollectionReference, updateDoc } from "firebase/firestore";
 import { signInWithPopup } from "firebase/auth";
 import { GoogleAuthProvider } from "firebase/auth";
+import { handleCompletion } from "./ApiHandlers";
 // TODO: Add SDKs for Firebase products that you want to use
 // https://firebase.google.com/docs/web/setup#available-libraries
 
@@ -75,5 +76,59 @@ export const checkAndAddUsertoFirestore = async (user: any) => {
             createdAt: new Date(),
             messages: []
         })
+    }
+}
+
+export const autoNameChat = (chatRef: any, messageContents: string) => {
+    const PROMPT = `write a short description summarizing the following chat, no more than 5 words: ${messageContents}`
+    handleCompletion(PROMPT).then((res) => {
+        const name = res
+        //console.log(name)
+        setDoc(chatRef, { name: name }, { merge: true })
+    })
+}
+
+
+export const checkExistingChat = async (subCollectionRef: CollectionReference) => {
+    const querySnapshot = await getDocs(subCollectionRef);
+
+    let chatExists = false
+    let chatId = ""
+    let existingChat = null
+
+    querySnapshot.forEach((doc: any) => {
+        const chat = doc.data();
+        console.log(chat)
+        if (chat.messages.length === 0) {
+            chatId = doc.id
+            existingChat = chat
+            chatExists = true
+            console.log(chatExists)
+            return; // Exit loop if a chat with no messages is found
+        }
+    });
+    console.log(chatExists)
+    return { chatExists, chatId, existingChat }
+}
+
+export const handleAddChat = async (subCollectionRef: CollectionReference) => {
+    const date = new Date();
+    const dateString = date.toISOString();//unique id every time
+    await setDoc(doc(subCollectionRef, dateString), {
+        name: "New Chat",
+        createdAt: date,
+        messages: []
+    })
+    return dateString
+}
+
+export const handleUpdateChat = async (subCollectionRef: CollectionReference, docId: string, messages: any[]) => {
+    const chatRef = doc(subCollectionRef, docId);
+    try {
+        await updateDoc(chatRef, {
+            messages: messages
+        });
+    } catch (e) {
+        console.log(e)
     }
 }

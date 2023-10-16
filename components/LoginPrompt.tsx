@@ -17,7 +17,7 @@ export default function LoginPrompt() {
                     <BsCircleFill />
                 </span>
                 <h1>You must login to access this route</h1>
-                <div className="flex flex-row gap-4">
+                <div className="flex flex-col sm:flex-row gap-4">
                     <button onClick={handleSignIn} className="login-button">Login</button>
                     <Link href={"/chat/guest"} className="login-button flex items-center justify-center">Proceed as Guest</Link>
                 </div>

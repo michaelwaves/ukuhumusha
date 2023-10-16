@@ -2,66 +2,58 @@
 import { useEffect, useState } from "react"
 import { AiOutlineSend } from "react-icons/ai"
 import { BsTranslate } from "react-icons/bs"
-import { db, useAuth, autoNameChat, handleAddChat, checkExistingChat, handleUpdateChat } from "@/utils/Firebase"
-import { collection, doc } from "firebase/firestore"
+import { db, useAuth, autoNameChat, handleUpdateChat } from "@/utils/Firebase"
+import { collection, doc, getDoc } from "firebase/firestore"
 import { motion } from "framer-motion"
 import { slideFromBottom } from "@/utils/FramerVariants"
 import { handleChat, handleTranslate } from "@/utils/ApiHandlers"
 import LanguageSelector from "./LanguageSelector"
 import Header from "./Header"
 
-const INITIAL_MESSAGES = [
-    {
-        role: "assistant",
-        content: "hello"
-    }
-]
 
-export default function Chat() {
-    const [messages, setMessages] = useState<any>(INITIAL_MESSAGES)//messages in EN
+export default function ChatDynamic({ chatId }: { chatId: string }) {
+
+    const [messages, setMessages] = useState<any>([])//messages in EN
     const [translatedMessages, setTranslatedMessages] = useState<any>([])//messages in obscure foreign language
     const [input, setInput] = useState("")
     const [target, setTarget] = useState("zu")
 
-
     const { user, signedIn } = useAuth();
-    const [currentDate, setCurrentDate] = useState<string>("")//using current date to ISO string as unique id for chat
-    const [existingChat, setExistingChat] = useState<any>({})
 
-    //add new chat to firestore if there isn't already a chat with name "New Chat" and no messages
+    //get current chat data from firestore
     useEffect(() => {
         if (!signedIn) return
         const subCollectionRef = collection(doc(db, "users", user.uid), "chats");
 
-        checkExistingChat(subCollectionRef).then((res) => {
-            if (!res.chatExists) {
-                handleAddChat(subCollectionRef).then((res) => {
-                    setCurrentDate(res)
-                })
+        const getChatMessages = async () => {
+            const chatRef = doc(subCollectionRef, chatId);
+            const docSnap = await getDoc(chatRef);
+            if (docSnap.exists()) {
+                setMessages(docSnap.data().messages)
             } else {
-                setExistingChat(res.existingChat);
-                setCurrentDate(res.chatId);
+                console.log("No such document!");
+                console.log(chatId)
             }
-        })
-
+        }
+        getChatMessages()
     }, [signedIn])
 
-    //update messages in firestore, auto name the chat using completions route handler on first response from api (3 messages)
+    //update messages in firestore, auto name the chat using completions route handler every 5 messages
     useEffect(() => {
         if (!signedIn) return
         const subCollectionRef = collection(doc(db, "users", user.uid), "chats");
 
-        if (currentDate !== "") {
-            handleUpdateChat(subCollectionRef, currentDate, messages)
+        if (chatId !== "") {
+            handleUpdateChat(subCollectionRef, chatId, messages)
         }
 
         const handleNameChat = async () => {
-            const chatRef = doc(subCollectionRef, currentDate);
+            const chatRef = doc(subCollectionRef, chatId);
             const messageContents = messages.map((message: any) => `${message.role}: ${message.content}\n`).toString()
             autoNameChat(chatRef, messageContents)
         }
 
-        if (messages.length == 3) {
+        if (messages.length % 5 === 0) {
             handleNameChat()
         }
     }, [messages])
@@ -94,8 +86,6 @@ export default function Chat() {
         })
     }, [translatedMessages])
 
-
-
     //normal chat
     /* useEffect(() => {
         if (messages.length === 0) return
@@ -123,9 +113,9 @@ export default function Chat() {
 
     return (
         <div className="flex w-full h-screen flex-col items-center justify-between">
-            <Header chatId={currentDate} />
+            <Header chatId={chatId} />
 
-            <div className="overflow-y-scroll h-full w-full">
+            <div className="h-full overflow-y-scroll">
                 {messageComponents}
 
                 <div className="flex flex-row items-center justify-center pb-28">
@@ -142,7 +132,7 @@ export default function Chat() {
 
                 </div>
             </div>
-            <div className="flex flex-col w-full p-2 gap-4 bg-gray-100 border-t-[1px] border-gray-300">
+            <div className=" flex flex-col w-full p-2 gap-4 bg-gray-100 border-t-[1px] border-gray-300">
 
                 <form onSubmit={(e) => handleSubmitInput(e)} className="flex flex-row w-full gap-4">
                     <input type="text" placeholder="Send a Message" className="px-4 w-full h-12 rounded-xl shadow-d" value={input} onChange={(e) => setInput(e.target.value)} />

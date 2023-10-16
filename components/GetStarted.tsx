@@ -30,7 +30,7 @@ export default function GetStarted() {
                     <button onClick={handleSignIn} className="login-button">Login</button>
                     <button onClick={handleSignIn} className="login-button">Sign Up</button>
                 </div>
-                <a href="https://arxiv.org/pdf/2310.02446.pdf" target="_blank" className="text-sm text-gray-400">Whitepaper</a>
+                <a href="https://arxiv.org/pdf/2310.02446.pdf" target="_blank" className="text-sm text-gray-400">About</a>
                 <div className="absolute bottom-0 w-full flex items-center justify-center h-20">
                     <div className="flex flex-row gap-2 text-sm text-gray-400">
                         <Link href="/legal">Terms of use</Link>

@@ -1,11 +1,12 @@
 "use client"
 import { useEffect, useState } from "react"
 import { AiOutlineSend } from "react-icons/ai"
+import { BiCopyAlt } from "react-icons/bi"
 import { BsTranslate } from "react-icons/bs"
 import { db, useAuth, autoNameChat, handleAddChat, checkExistingChat, handleUpdateChat } from "@/utils/Firebase"
 import { collection, doc } from "firebase/firestore"
-import { motion } from "framer-motion"
-import { slideFromBottom } from "@/utils/FramerVariants"
+import { AnimatePresence, motion } from "framer-motion"
+import { slideFromBottom, copyPopup } from "@/utils/FramerVariants"
 import { handleChat, handleTranslate } from "@/utils/ApiHandlers"
 import LanguageSelector from "./LanguageSelector"
 import Header from "./Header"
@@ -27,6 +28,7 @@ export default function Chat() {
     const { user, signedIn } = useAuth();
     const [currentDate, setCurrentDate] = useState<string>("")//using current date to ISO string as unique id for chat
     const [existingChat, setExistingChat] = useState<any>({})
+    const [copySuccess, setCopySuccess] = useState(false)
 
     //add new chat to firestore if there isn't already a chat with name "New Chat" and no messages
     useEffect(() => {
@@ -66,6 +68,25 @@ export default function Chat() {
         }
     }, [messages])
 
+    //text copy functionality
+    const copyText = async (text: string) => {
+        try {
+            await navigator.clipboard.writeText(text);
+            console.log('Text copied to clipboard');
+            setCopySuccess(true);
+        } catch (err) {
+            console.error('Failed to copy text: ', err);
+        }
+    };
+
+    useEffect(() => {
+        if (copySuccess) {
+            setTimeout(() => {
+                setCopySuccess(false);
+            }, 500);
+        }
+    }, [copySuccess]);
+
     const messageComponents = messages.map((message: any, index: any) => {
         let content = message.content;
         if (typeof content !== 'string') {
@@ -75,9 +96,24 @@ export default function Chat() {
             <p key={i}>{text}</p>
         ));
         return (
-            <div key={index} className={`w-full flex flex-col gap-2 p-2 ${message.role == "assistant" ? "bg-gray-100" : ""}`}>
-                <b>{message.role}</b>
+            <div key={index} className={`relative w-full flex flex-col gap-2 p-2 ${message.role == "assistant" ? "bg-gray-100" : ""}`}>
+                <span className="w-full flex flex-row justify-between">
+                    <b>{message.role}</b>
+                    <BiCopyAlt className="text-gray-400 w-6 h-6 hover:cursor-pointer" onClick={() => copyText(message.content)} />
+                </span>
                 {contentArray}
+                <AnimatePresence>
+                    {copySuccess &&
+                        <motion.div
+                            variants={copyPopup}
+                            initial={"active"}
+                            animate={"active"}
+                            exit={"hidden"}
+                            className="absolute bottom-2 right-2 z-10 p-2 rounded-md bg-gray-700 text-white">
+                            <p>Copied!</p>
+                        </motion.div>
+                    }
+                </AnimatePresence>
             </div>
         )
     })

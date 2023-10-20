@@ -3,11 +3,25 @@ export const slideFromBottom = {
         y: 0,
         opacity: 1,
         transition: {
-            ease: "easeInOut"
+            ease: "easeOut",
         }
     },
     hidden: {
         y: 100,
+        opacity: 0
+    }
+}
+export const copyPopup = {
+    active: {
+        y: 0,
+        opacity: 1,
+        transition: {
+            ease: "easeInOut",
+            duration: 0.1
+        }
+    },
+    hidden: {
+        y: 10,
         opacity: 0
     }
 }

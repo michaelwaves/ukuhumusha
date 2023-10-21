@@ -8,7 +8,7 @@ import { LANGUAGE_CODES } from "@/utils/LanguageCodes"
 import { motion, AnimatePresence } from "framer-motion"
 import { slideFromBottom, slideFromTop } from "@/utils/FramerVariants"
 import { handleChat, handleTranslate } from "@/utils/ApiHandlers"
-
+import CopyPaste from "@/components/CopyPaste"
 
 const INITIAL_MESSAGES = [
     {
@@ -70,8 +70,12 @@ export default function ChatGuest() {
         ));
         return (
             <div key={index} className={`w-full flex flex-col gap-2 p-2 ${message.role == "assistant" ? "bg-gray-100" : ""}`}>
-                <b>{message.role}</b>
+                <span className="w-full flex flex-row justify-between relative">
+                    <b>{message.role}</b>
+                    <CopyPaste text={message.content} />
+                </span>
                 {contentArray}
+
             </div>
         )
     })

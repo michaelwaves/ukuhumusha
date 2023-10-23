@@ -70,6 +70,8 @@ export default function ChatDynamic({ chatId }: { chatId: string }) {
         return (
             <motion.div
                 variants={slideFromBottom}
+                initial={"hidden"}
+                animate={"active"}
                 key={index} className={` w-full flex flex-col gap-2 p-2 ${message.role == "assistant" ? "bg-gray-100" : ""}`}>
                 <span className="w-full flex flex-row justify-between relative">
                     <b>{message.role}</b>

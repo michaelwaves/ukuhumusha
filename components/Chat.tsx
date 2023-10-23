@@ -80,24 +80,14 @@ export default function Chat() {
         return (
             <motion.div
                 variants={slideFromBottom}
+                initial={"hidden"}
+                animate={"active"}
                 key={index} className={`relative w-full flex flex-col gap-2 p-2 ${message.role == "assistant" ? "bg-gray-100" : ""}`}>
                 <span className="w-full flex flex-row justify-between">
                     <b>{message.role}</b>
                     <CopyPaste text={message.content} />
                 </span>
                 {contentArray}
-                <AnimatePresence>
-                    {copySuccess &&
-                        <motion.div
-                            variants={copyPopup}
-                            initial={"active"}
-                            animate={"active"}
-                            exit={"hidden"}
-                            className="absolute bottom-2 right-2 z-10 p-2 rounded-md bg-gray-700 text-white">
-                            <p>Copied!</p>
-                        </motion.div>
-                    }
-                </AnimatePresence>
             </motion.div>
         )
     })

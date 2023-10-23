@@ -9,6 +9,7 @@ import { slideFromBottom } from "@/utils/FramerVariants"
 import { handleChat, handleTranslate } from "@/utils/ApiHandlers"
 import LanguageSelector from "./LanguageSelector"
 import Header from "./Header"
+import CopyPaste from "./CopyPaste"
 
 
 export default function ChatDynamic({ chatId }: { chatId: string }) {
@@ -69,8 +70,11 @@ export default function ChatDynamic({ chatId }: { chatId: string }) {
         return (
             <motion.div
                 variants={slideFromBottom}
-                key={index} className={`w-full flex flex-col gap-2 p-2 ${message.role == "assistant" ? "bg-gray-100" : ""}`}>
-                <b>{message.role}</b>
+                key={index} className={` w-full flex flex-col gap-2 p-2 ${message.role == "assistant" ? "bg-gray-100" : ""}`}>
+                <span className="w-full flex flex-row justify-between relative">
+                    <b>{message.role}</b>
+                    <CopyPaste text={message.content} />
+                </span>
                 {contentArray}
             </motion.div>
         )

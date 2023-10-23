@@ -96,7 +96,9 @@ export default function Chat() {
             <p key={i}>{text}</p>
         ));
         return (
-            <div key={index} className={`relative w-full flex flex-col gap-2 p-2 ${message.role == "assistant" ? "bg-gray-100" : ""}`}>
+            <motion.div
+                variants={slideFromBottom}
+                key={index} className={`relative w-full flex flex-col gap-2 p-2 ${message.role == "assistant" ? "bg-gray-100" : ""}`}>
                 <span className="w-full flex flex-row justify-between">
                     <b>{message.role}</b>
                     <BiCopyAlt className="text-gray-400 w-6 h-6 hover:cursor-pointer" onClick={() => copyText(message.content)} />
@@ -114,7 +116,7 @@ export default function Chat() {
                         </motion.div>
                     }
                 </AnimatePresence>
-            </div>
+            </motion.div>
         )
     })
 

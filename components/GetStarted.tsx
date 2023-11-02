@@ -29,6 +29,7 @@ export default function GetStarted() {
                 <div className="flex flex-col sm:flex-row gap-4">
                     <button onClick={handleSignIn} className="login-button">Login</button>
                     <button onClick={handleSignIn} className="login-button">Sign Up</button>
+                    <Link href={"/guest"} className="text-center">Proceed as Guest</Link>
                 </div>
                 <a href="https://arxiv.org/pdf/2310.02446.pdf" target="_blank" className="text-sm text-gray-400">About</a>
                 <div className="absolute bottom-0 w-full flex items-center justify-center h-20">

@@ -68,13 +68,17 @@ export default function ChatDynamic({ chatId }: { chatId: string }) {
             <p key={i}>{text}</p>
         ));
         return (
-            <div key={index} className={` w-full flex flex-col gap-2 p-2 ${message.role == "assistant" ? "bg-gray-100" : ""}`}>
+            <motion.div
+                variants={slideFromBottom}
+                initial={"hidden"}
+                animate={"active"}
+                key={index} className={` w-full flex flex-col gap-2 p-2 ${message.role == "assistant" ? "bg-gray-100" : ""}`}>
                 <span className="w-full flex flex-row justify-between relative">
                     <b>{message.role}</b>
                     <CopyPaste text={message.content} />
                 </span>
                 {contentArray}
-            </div>
+            </motion.div>
         )
     })
 

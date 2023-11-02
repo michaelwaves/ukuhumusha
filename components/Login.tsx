@@ -19,7 +19,7 @@ export default function Login() {
             <AiFillGoogleCircle className="text-4xl" />
         </button>
 
-    const popupComponent = <div className="w-40 text-center text-gray-700 bg-white p-2 rounded-md shadow-lg flex flex-col gap-2 absolute top-0 left-0 -translate-x-full">
+    const popupComponent = <div className="w-40 text-center text-gray-700 bg-white p-2 rounded-md shadow-lg flex flex-col gap-2 absolute top-0 left-0 -translate-x-full z-50">
         <button onClick={() => { handleSignOut(), setPopup(false) }}>Sign Out</button>
         <Link href="/profile">Edit Profile</Link>
     </div>

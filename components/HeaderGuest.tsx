@@ -9,10 +9,6 @@ export default function HeaderGuest() {
             <div className="w-full items-center justify-center flex">
                 <h2>Ukuhumusha Chat</h2>
             </div>
-            {/*  <div className="flex flex-row gap-2">
-
-                <Link href={"/chat"} className="login-button flex items-center justify-center">Login to Save Chats</Link>
-            </div> */}
         </div >
     )
 }

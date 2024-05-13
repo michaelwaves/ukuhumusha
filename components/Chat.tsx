@@ -104,7 +104,7 @@ export default function Chat() {
 
 
 
-    //normal chat
+    //normal chat without translation
     /* useEffect(() => {
         if (messages.length === 0) return
         if (messages[messages.length - 1].role === "assistant") return

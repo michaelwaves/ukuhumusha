@@ -6,7 +6,7 @@ import Chat from "@/components/Chat"
 export default function Page() {
     const { signedIn } = useAuth();
     return (
-        <main className="">
+        <main className="w-full">
             {signedIn ? <Chat /> : <LoginPrompt />}
         </main>
     )

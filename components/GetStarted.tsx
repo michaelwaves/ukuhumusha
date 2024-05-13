@@ -25,15 +25,17 @@ export default function GetStarted() {
                     <h1>Ukuhumusha Chat</h1>
                     <BsCircleFill />
                 </span>
-                <h1>Get Started</h1>
+                <h1 className="h-6">Get Started</h1>
                 <div className="flex flex-col sm:flex-row gap-4">
                     <button onClick={handleSignIn} className="login-button">Login</button>
                     <button onClick={handleSignIn} className="login-button">Sign Up</button>
                 </div>
-                <Link href={"/guest"} className="text-center">Proceed as Guest</Link>
-                <a href="https://arxiv.org/pdf/2310.02446.pdf" target="_blank" className="text-sm text-gray-400">About</a>
+                <Link href={"/guest"} className="text-center h-12"><b>Proceed as Guest</b></Link>
+                
                 <div className="absolute bottom-0 w-full flex items-center justify-center h-20">
                     <div className="flex flex-row gap-2 text-sm text-gray-400">
+                    <a href="https://arxiv.org/pdf/2310.02446.pdf" target="_blank" className="text-sm text-gray-400">About</a>
+                    |
                         <Link href="/legal">Terms of use</Link>
                         |
                         <Link href="/legal/privacy">Privacy Policy</Link>

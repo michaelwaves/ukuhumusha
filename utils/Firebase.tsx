@@ -132,3 +132,21 @@ export const handleUpdateChat = async (subCollectionRef: CollectionReference, do
         console.log(e)
     }
 }
+
+export async function addTestChat(){
+    const date = new Date();
+    const dateString = date.toISOString();
+    const subCollectionRef = collection(doc(db,"users","lyK9QtFr7LPO5pq08wHnLhr3VSS2"),"chats")
+    const chatData = {
+        name:"test chat",
+        messages:[
+            {
+                role:"assistant",
+                content:"hello world"
+            }
+        ],
+        createdAt:date
+    }
+    await setDoc(doc(subCollectionRef,"test"),chatData)
+    console.log("added test document to chat lyK9QtFr7LPO5pq08wHnLhr3VSS2")
+}

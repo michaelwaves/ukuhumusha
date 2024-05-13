@@ -123,7 +123,7 @@ export default function ChatDynamic({ chatId }: { chatId: string }) {
         <div className="flex w-full h-screen flex-col items-center justify-between">
             <Header chatId={chatId} />
 
-            <div className="h-full overflow-y-scroll">
+            <div className="h-full overflow-y-scroll w-full scrollbar">
                 {messageComponents}
 
                 <div className="flex flex-row items-center justify-center pb-28">

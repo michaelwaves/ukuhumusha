@@ -50,6 +50,7 @@ export default function LandingHero() {
 
     useEffect(() => {
         const timer = setTimeout(() => {
+            //for a random index instead of incrementing index:
             //const randomIndex = Math.floor(Math.random() * LANDING_PAGE_TEXT.length)
             setSubIndex(subIndex => (subIndex + 1) % 3)
         }, TIME_INTERVAL / 3)

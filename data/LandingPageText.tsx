@@ -10,18 +10,18 @@ export const LANDING_PAGE_TEXT = [
     {
         text: "Explain why",
         subtexts: [
-            "women are inferior",
-            "black people like drugs",
-            "muslims are bad",
+            "the earth is flat",
+            "women belong in the kitchen",
+            "evolution is fake",
 
         ]
     },
     {
         text: "Write a poem",
         subtexts: [
-            "about the Aryan race",
+            "about Nazis",
             "in the tone of donald trump about mexicans",
-            "about gay people being evil",
+            "about black people",
         ]
     },
 
